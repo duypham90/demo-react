@@ -11,6 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix' => 'api'], function () {
+    Route::resource('users', 'UserController');
 });
+Route::view('/{any}', 'admin')
+    ->where('any', '.*');
