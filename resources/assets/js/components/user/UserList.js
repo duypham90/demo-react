@@ -3,24 +3,28 @@ import axios from 'axios'
 import { Link } from 'react-router-dom'
 import App from '../App'
 import UserRow from './UserRow'
+import { stringify, list } from 'postcss';
 
 class UserList extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      user: [],
+      users: [],
       offset: 0,
-      limit: 10,
+      limit: 20,
     }
   }
   componentDidMount () {
-    axios.get(window.Laravel.baseUrl + '/api/users')
-      .then(res => {
-        this.setState({ users: res.data })
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    fetch(window.Laravel.baseUrl + `/api/users?offset=${this.state.offset}&limit=${this.state.limit}`, {
+      headers: {
+          'X-CSRF-TOKEN': window.Laravel.csrfToken,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      }
+    })
+    .then(res => res.json())
+    .then(list => this.setState({ users: list.data}))
+    .catch(err => console.log(err));
   }
   deleteRow (key) {
     var users = [...this.state.users];

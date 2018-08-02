@@ -2,22 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Paginatable;
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserCollection;
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
+    use Paginatable;
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function index(Request $request)
     {
-        $offset = $request->get('offset', 0);
-        $limit = $request->get('limit', 10);
+        $offset = (int)$request->get('offset', \Constant::OFFSET);
+        $limit = $this->getPerPage($request->get('limit', \Constant::MIN_LIMIT));
         $users = User::skip($offset)->limit($limit)->get();
-        return response()->json($users);
+
+        return new UserCollection($users);
     }
 
     /**
