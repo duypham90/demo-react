@@ -6,8 +6,7 @@ import {
     Switch
 } from 'react-router-dom'
 import createBrowserHistory from 'history/createBrowserHistory'
-
-import UserList from './components/user/UserList';
+import UserList from './components/user/UserList'
 
 const history = createBrowserHistory()
 render (

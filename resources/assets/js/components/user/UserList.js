@@ -12,9 +12,14 @@ class UserList extends Component {
       users: [],
       offset: 0,
       limit: 20,
+      totalUser: 0,
+
     }
   }
   componentDidMount () {
+    this.makeRequest()
+  }
+  makeRequest() {
     fetch(window.Laravel.baseUrl + `/api/users?offset=${this.state.offset}&limit=${this.state.limit}`, {
       headers: {
           'X-CSRF-TOKEN': window.Laravel.csrfToken,
@@ -23,7 +28,11 @@ class UserList extends Component {
       }
     })
     .then(res => res.json())
-    .then(list => this.setState({ users: list.data}))
+    .then(list => this.setState({
+       ...this.state, 
+       users: list.data, 
+       totalUser: list.meta.total,
+    }))
     .catch(err => console.log(err));
   }
   deleteRow (key) {
@@ -38,6 +47,14 @@ class UserList extends Component {
       })
     }
   }
+  handleChange (event) {
+    const limit = event.target.value;
+    this.setState((prevState) => ({
+      ...prevState, limit: limit
+    }), () => {
+      this.makeRequest();
+    });
+  }
 
   render () {
     return (
@@ -46,6 +63,14 @@ class UserList extends Component {
         <div className='clearfix'>
           <Link className='btn btn-success pull-right' to='/users/create'>Add User</Link>
         </div><br />
+        <div className="pull-right">
+          <select className="form-control" value={this.state.limit} onChange={this.handleChange.bind(this)}>
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+          </select>
+        </div>
         <table className='table table-hover'>
           <thead>
             <tr>
