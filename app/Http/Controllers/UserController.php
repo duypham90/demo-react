@@ -6,7 +6,7 @@ use App\Models\Paginatable;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserCollection;
-use Illuminate\Support\Facades\Cache;
+use App\Http\Resources\User as UserResouce;
 
 class UserController extends Controller
 {
@@ -15,6 +15,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function index(Request $request)
@@ -59,14 +60,18 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return UserResouce|\Illuminate\Http\JsonResponse
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+
+        if (! $user) {
+            return response()->json('The user is not exists', 404);
+        }
+
+        return new UserResouce($user);
     }
 
     /**
@@ -89,6 +94,14 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json('Error: user not found', 400);
+        }
+
+        $user->delete();
+
+        return response()->json(['message' => 'delete success']);
     }
 }
