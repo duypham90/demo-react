@@ -8,14 +8,15 @@
     <title>Laravel 5.6 - ReactJS Example</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
     <script type="text/javascript">
-        window.Laravel = {!! json_encode([
+        laravel = {!! json_encode([
                 'baseUrl' => url('/'),
                 'csrfToken' => csrf_token(),
             ]) !!};
     </script>
 </head>
 <body>
-<div id="app"></div>
-<script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+    <div id="root"></div>
+    <script src="http://localhost:3333/bundle.js"></script>
 </body>
 </html>
+
