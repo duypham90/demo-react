@@ -7,8 +7,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Laravel 5.6 - ReactJS Example</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+    <base href="/"></base>
     <script type="text/javascript">
-        laravel = {!! json_encode([
+        window.laravel = {!! json_encode([
                 'baseUrl' => url('/'),
                 'csrfToken' => csrf_token(),
             ]) !!};

@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import axios from 'axios'
+import * as React from 'react';
+import { Link } from 'react-router-dom';
 
-class UserRow extends Component<any, any> {
+class UserRow extends React.Component<any, any> {
     constructor(props) {
         super(props)
         this.handleDelete = this.handleDelete.bind(this)
@@ -19,16 +18,16 @@ class UserRow extends Component<any, any> {
 
         const { id } = this.props.obj;
 
-        fetch(`http://demo-react.local/api/users/${id}`, {
+        fetch(`api/users/${id}`, {
             method: 'delete',
             headers: {
                 'X-CSRF-TOKEN': '',
             },
             credentials: 'same-origin'
         })
-            .then(res => res.json())
-            .then(data => this.props.deleteRow(this.props.index))
-            .catch(err => console.log(err));
+        .then(res => res.json())
+        .then(data => this.props.deleteRow(this.props.index))
+        .catch(err => console.log(err));
     }
     getDetail(e) {
         const { id } = this.props.obj;
