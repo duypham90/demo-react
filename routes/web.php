@@ -10,9 +10,5 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::group(['prefix' => 'api'], function () {
-    Route::resource('users', 'UserController');
-});
 Route::view('/{any}', 'admin')
     ->where('any', '.*');

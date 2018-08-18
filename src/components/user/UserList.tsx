@@ -1,12 +1,8 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import Navbar from '../menu/Navbar'
-import UserRow from './UserRow'
-// import DayPickerInput from 'react-day-picker';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import 'react-day-picker/lib/style.css';
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+import UserRow from './UserRow';
 
-interface User{
+interface User {
     id: number;
     name: string;
     email: number;
@@ -17,12 +13,10 @@ interface UserListState {
     offset: number,
     limit: number,
     totalUser: number,
-    isLoading: boolean,
-    selectedDay: undefined,
-    isDisabled: boolean,
+    isLoading: boolean
 }
 
-class UserList extends Component<any, UserListState> {
+class UserList extends React.Component<any, UserListState> {
     constructor(props) {
         super(props)
         this.state = {
@@ -31,8 +25,6 @@ class UserList extends Component<any, UserListState> {
             limit: 11,
             totalUser: 0,
             isLoading: false,
-            selectedDay: undefined,
-            isDisabled: false,
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -45,13 +37,13 @@ class UserList extends Component<any, UserListState> {
     makeRequest() {
         const { offset, limit } = this.state;
         fetch(`api/users?offset=${offset}&limit=${limit}`)
-        .then(res => res.json())
-        .then(list => this.setState({
-            ...this.state,
-            users: list.data,
-            totalUser: list.meta.total,
-        }))
-        .catch(err => console.log(err));
+            .then(res => res.json())
+            .then(list => this.setState({
+                ...this.state,
+                users: list.data,
+                totalUser: list.meta.total,
+            }))
+            .catch(err => console.log(err));
     }
 
     deleteRow(key) {
@@ -77,27 +69,9 @@ class UserList extends Component<any, UserListState> {
         });
     }
 
-    handleDayChange(selectedDay: any, modifiers: any) {
-        this.setState({
-          selectedDay,
-          isDisabled: modifiers.disabled === true,
-        });
-      }
-      
     render() {
-        const { selectedDay, isDisabled } = this.state;
         return (
-            <Navbar>
-                <DayPickerInput
-                    value={selectedDay}
-                    onDayChange={this.handleDayChange}
-                    dayPickerProps={{
-                        selectedDays: selectedDay,
-                        disabledDays: {
-                        daysOfWeek: [0, 6],
-                        },
-                    }}
-                />
+            <div>
                 <h1>Users</h1>
                 <div className='clearfix'>
                     <Link className='btn btn-success pull-right' to='/users/create'>Add User</Link>
@@ -124,7 +98,7 @@ class UserList extends Component<any, UserListState> {
                         {this.fetchRows()}
                     </tbody>
                 </table>
-            </Navbar>
+            </div>
         )
     }
 }

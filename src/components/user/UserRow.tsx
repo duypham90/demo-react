@@ -1,17 +1,23 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-class UserRow extends React.Component<any, any> {
+interface UserDetail {
+    model: string
+}
+
+class UserRow extends React.Component<any, UserDetail> {
     constructor(props) {
         super(props)
         this.handleDelete = this.handleDelete.bind(this)
         this.getDetail = this.getDetail.bind(this)
         this.state = {
-            detail: '',
+            model: '',
         }
     }
+
     handleDelete(e) {
         e.preventDefault()
+        console.log(window.laravel.csrfToken);
         if (!confirm('Are your sure you want to delete this item?')) {
             return false
         }
@@ -29,28 +35,24 @@ class UserRow extends React.Component<any, any> {
         .then(data => this.props.deleteRow(this.props.index))
         .catch(err => console.log(err));
     }
+
     getDetail(e) {
+        e.preventDefault();
         const { id } = this.props.obj;
-        fetch(`http://demo-react.local/api/users/${id}/edit`)
+        fetch(`api/users/${id}/edit`)
             .then(res => res.json())
             .then(data => console.log(data))
             .catch(err => console.log(err));
     }
+    
     render() {
+        const { id, name, email, created_at } = this.props.obj;
         return (
             <tr>
-                <td>
-                    {this.props.obj.id}
-                </td>
-                <td>
-                    {this.props.obj.name}
-                </td>
-                <td>
-                    {this.props.obj.email}
-                </td>
-                <td>
-                    {this.props.obj.created_at}
-                </td>
+                <td>{id}</td>
+                <td>{name}</td>
+                <td>{email}</td>
+                <td>{created_at}</td>
                 <td>
                     <button className='btn btn-primary' onClick={this.getDetail}>Edit</button>
                 </td>
