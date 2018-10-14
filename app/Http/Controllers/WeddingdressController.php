@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\WeddingdressCollection;
 use App\Models\Paginatable;
-use App\User;
+use App\Models\WeddingDress;
 use Illuminate\Http\Request;
-use App\Http\Resources\UserCollection;
-use App\Http\Resources\User as UserResouce;
 
-class UserController extends Controller
+class WeddingdressController extends Controller
 {
     use Paginatable;
 
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
-     * @return \Illuminate\Http\Resources\Json\JsonResource
+     * @return TransportCollection
      */
     public function index(Request $request)
     {
+        $columns = $request->get('columns', ['*']);
+        $columns = !empty($columns) ? $columns : ['*'];
         $offset = (int)$request->get('offset', \Constant::OFFSET);
         $limit = $this->getPerPage($request->get('limit', \Constant::MIN_LIMIT));
-        $data = User::skip($offset)->limit($limit)->get();
+        $data = WeddingDress::skip($offset)->limit($limit)->get($columns);
 
-        return new UserCollection($data);
+        return new WeddingdressCollection($data);
     }
 
     /**
@@ -60,18 +60,14 @@ class UserController extends Controller
     }
 
     /**
-     * @param $id
-     * @return UserResouce|\Illuminate\Http\JsonResponse
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $user = User::find($id);
-
-        if (! $user) {
-            return response()->json('The user is not exists', 404);
-        }
-
-        return new UserResouce($user);
+        //
     }
 
     /**
@@ -94,14 +90,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json('Error: user not found', 400);
-        }
-
-        $user->delete();
-
-        return response()->json(['message' => 'delete success']);
+        //
     }
 }

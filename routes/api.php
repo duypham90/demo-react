@@ -14,3 +14,6 @@ use Illuminate\Http\Request;
 */
 
 Route::resource('users', 'UserController');
+Route::resource('transports', 'TransportController');
+Route::resource('photos', 'PhotoController');
+Route::resource('weddingdress', 'WeddingdressController');
